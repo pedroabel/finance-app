@@ -5,10 +5,8 @@ class ReportsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(
-        child: Text("ReportsPage"),
-      ),
+    return const Center(
+      child: Text("ReportsPage"),
     );
   }
 }

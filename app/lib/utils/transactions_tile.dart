@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TransactionsTile extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final icon;
   final String transactions;
   final String price;
