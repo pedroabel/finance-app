@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Container(
             // Here the height of the container is 35% of our total height
-            height: size.height * .17,
+            height: size.height * .16,
             decoration: BoxDecoration(
               color: Colors.blue[800],
             ),
