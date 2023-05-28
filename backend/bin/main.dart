@@ -19,7 +19,7 @@ void main() async {
   var _securityService = _di.get<SecurityService>();
 
   var cascadeHandler = Cascade()
-      .add(LoginAPI(SecurityServiceImp()).getHandler())
+      .add(LoginAPI(_securityService).getHandler())
       .add(TransactionsAPI(TransactionService()).getHandler(
         middlewares: [
           _securityService.auth,

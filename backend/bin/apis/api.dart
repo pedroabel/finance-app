@@ -13,6 +13,7 @@ abstract class API {
     final _di = DependencyInjector();
 
     var _securityService = _di.get<SecurityService>();
+
     middlewares ??= [];
 
     var pipe = Pipeline();
