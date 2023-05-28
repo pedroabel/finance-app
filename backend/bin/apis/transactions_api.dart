@@ -12,7 +12,10 @@ class TransactionsAPI extends API {
   TransactionsAPI(this._service);
 
   @override
-  Handler getHandler({List<Middleware>? middlewares}) {
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+  }) {
     Router router = Router();
 
     //All transactions
@@ -50,6 +53,7 @@ class TransactionsAPI extends API {
 
     return createHandler(
       router: router,
+      isSecurity: isSecurity,
       middlewares: middlewares,
     );
   }
