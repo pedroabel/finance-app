@@ -1,11 +1,13 @@
 {
-	"folders": [
-		{
-			"path": "app"
-		},
-		{
-			"path": "backend"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "app"
+    },
+    {
+      "path": "backend"
+    }
+  ],
+  "settings": {
+    "git.ignoreLimitWarning": true
+  }
 }
