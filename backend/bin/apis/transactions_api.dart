@@ -5,12 +5,14 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/transaction_model.dart';
 import '../services/generic_service.dart';
+import 'api.dart';
 
-class TransactionsAPI {
+class TransactionsAPI extends API {
   final GenericService<TransactionModel> _service;
   TransactionsAPI(this._service);
 
-  Handler get handler {
+  @override
+  Handler getHandler({List<Middleware>? middlewares}) {
     Router router = Router();
 
     //All transactions
@@ -46,6 +48,9 @@ class TransactionsAPI {
       return Response.ok('');
     });
 
-    return router;
+    return createHandler(
+      router: router,
+      middlewares: middlewares,
+    );
   }
 }
