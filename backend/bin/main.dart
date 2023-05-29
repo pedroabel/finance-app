@@ -8,7 +8,7 @@ import 'infra/custom_server.dart';
 import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
 import 'utils/custom_env.dart';
-import 'package:mysql1/mysql1.dart';
+// import 'package:mysql1/mysql1.dart';
 
 void main() async {
   CustomEnv.fromFile('.env');
