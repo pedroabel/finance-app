@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:shelf/shelf.dart';
 
 import 'apis/login_api.dart';
@@ -5,8 +7,8 @@ import 'apis/transactions_api.dart';
 import 'infra/custom_server.dart';
 import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
-import 'services/transaction_service.dart';
 import 'utils/custom_env.dart';
+import 'package:mysql1/mysql1.dart';
 
 void main() async {
   CustomEnv.fromFile('.env');
