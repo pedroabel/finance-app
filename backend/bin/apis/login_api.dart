@@ -16,8 +16,7 @@ class LoginAPI extends API {
 
     router.post('/login', (Request req) async {
       var token = await _securityService.generateJWT('1');
-      // var result = await _securityService.validateJWT(token);
-      await _securityService.validateJWT(token);
+      var result = await _securityService.validateJWT(token);
 
       return Response.ok(token);
     });

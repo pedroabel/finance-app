@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
-
 import 'package:shelf/shelf.dart';
 
 import '../infra/dependency_injector/dependency_injector.dart';
