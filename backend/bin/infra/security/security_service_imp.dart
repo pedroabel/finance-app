@@ -42,7 +42,6 @@ class SecurityServiceImp implements SecurityService<JWT> {
   }
 
   @override
-  // TODO: implement auth
   Middleware get auth {
     return (Handler handler) {
       return (Request req) async {
@@ -64,7 +63,6 @@ class SecurityServiceImp implements SecurityService<JWT> {
   }
 
   @override
-  // TODO: implement verifyJWT
   Middleware get verifyJWT => createMiddleware(
         requestHandler: (Request req) {
           if (req.context['jwt'] == null) {

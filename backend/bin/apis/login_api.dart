@@ -1,6 +1,5 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
-
 import '../infra/security/security_service.dart';
 import 'api.dart';
 
@@ -17,7 +16,8 @@ class LoginAPI extends API {
 
     router.post('/login', (Request req) async {
       var token = await _securityService.generateJWT('1');
-      var result = await _securityService.validateJWT(token);
+      // var result = await _securityService.validateJWT(token);
+      await _securityService.validateJWT(token);
 
       return Response.ok(token);
     });

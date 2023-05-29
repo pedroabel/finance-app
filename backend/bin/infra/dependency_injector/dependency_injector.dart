@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_generic_function_type_aliases, prefer_collection_literals, prefer_if_null_operators
+
 typedef T InstanceCreator<T>();
 
 class DependencyInjector {
