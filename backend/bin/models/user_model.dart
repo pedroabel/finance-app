@@ -1,13 +1,16 @@
 class UserModel {
-  final int id;
-  final String name;
-  final String email;
-  final String balance;
-  final bool isActived;
-  final DateTime dtCriated;
-  final DateTime dtUppdate;
+  int? id;
+  String? name;
+  String? email;
+  String? password;
+  String? balance;
+  bool? isActived;
+  DateTime? dtCriated;
+  DateTime? dtUppdate;
 
-  UserModel(
+  UserModel();
+
+  UserModel.create(
     this.id,
     this.name,
     this.email,
@@ -18,7 +21,7 @@ class UserModel {
   );
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+    return UserModel.create(
       map['id']?.toInt() ?? 0,
       map['nome'] ?? '',
       map['email'] ?? '',

@@ -28,4 +28,10 @@ class MySQLConfiguration extends DBConfiguration {
       ),
     );
   }
+
+  @override
+  execQuery(String sql, [List? parms]) {
+    // TODO: implement execQuery
+    throw UnimplementedError();
+  }
 }
