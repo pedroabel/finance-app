@@ -20,14 +20,6 @@ class UserModel {
     this.dtUppdate,
   );
 
-  factory UserModel.fromRequest(Map map) {
-    return UserModel()
-      ..name = map['name']
-      ..email = map['email']
-      ..password = map['password']
-      ..balance = map['balance'];
-  }
-
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel.create(
       map['id']?.toInt() ?? 0,
@@ -38,6 +30,20 @@ class UserModel {
       map['dt_criacao'],
       map['dt_atualizacao'],
     );
+  }
+
+  factory UserModel.fromEmail(Map map) {
+    return UserModel()
+      ..id = map['id']?.toInt()
+      ..password = map['password'];
+  }
+
+  factory UserModel.fromRequest(Map map) {
+    return UserModel()
+      ..name = map['name']
+      ..email = map['email']
+      ..password = map['password']
+      ..balance = map['balance'];
   }
 
   @override

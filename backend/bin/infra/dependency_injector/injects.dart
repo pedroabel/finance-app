@@ -4,6 +4,7 @@ import '../../apis/user_api.dart';
 import '../../dao/user_dao.dart';
 import '../../models/transaction_model.dart';
 import '../../services/generic_service.dart';
+import '../../services/login_service.dart';
 import '../../services/transaction_service.dart';
 import '../../services/user_service.dart';
 import '../database/db_configuration.dart';
@@ -20,15 +21,18 @@ class Injects {
 
     di.register<SecurityService>(() => SecurityServiceImp());
 
-    di.register<LoginAPI>(() => LoginAPI(di.get()));
-
     di.register<GenericService<TransactionModel>>(() => TransactionService());
     di.register<TransactionsAPI>(
-        () => TransactionsAPI(di.get<GenericService<TransactionModel>>()));
+        () => TransactionsAPI(di<GenericService<TransactionModel>>()));
 
-    di.register<UserDAO>(() => UserDAO(di.get<DBConfiguration>()));
-    di.register<UserService>(() => UserService(di.get<UserDAO>()));
-    di.register<UserAPI>(() => UserAPI(di.get<UserService>()));
+    di.register<UserDAO>(() => UserDAO(di<DBConfiguration>()));
+    di.register<UserService>(() => UserService(di<UserDAO>()));
+    di.register<UserAPI>(() => UserAPI(di<UserService>()));
+
+    di.register<LoginService>(() => LoginService(di<UserService>()));
+    di.register<LoginAPI>(
+      () => LoginAPI(di<SecurityService>(), di<LoginService>()),
+    );
 
     return di;
   }
