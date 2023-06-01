@@ -14,7 +14,7 @@ void main() async {
 
   var cascadeHandler = Cascade()
       .add(_di.get<LoginAPI>().getHandler())
-      // .add(_di.get<TransactionsAPI>().getHandler(isSecurity: true))
+      .add(_di.get<TransactionsAPI>().getHandler(isSecurity: true))
       .add(_di.get<UserAPI>().getHandler(isSecurity: true))
       .handler;
 
