@@ -1,13 +1,10 @@
 import 'package:shelf/shelf.dart';
-import 'package:test/test.dart';
 import 'apis/login_api.dart';
 import 'apis/transactions_api.dart';
-import 'dao/user_dao.dart';
+import 'apis/user_api.dart';
 import 'infra/custom_server.dart';
-import 'infra/database/db_configuration.dart';
 import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
-import 'models/user_model.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
@@ -15,11 +12,10 @@ void main() async {
 
   final _di = Injects.initialize();
 
-  UserDAO _userDAO = UserDAO(_di.get<DBConfiguration>());
-
   var cascadeHandler = Cascade()
       .add(_di.get<LoginAPI>().getHandler())
-      .add(_di.get<TransactionsAPI>().getHandler(isSecurity: true))
+      // .add(_di.get<TransactionsAPI>().getHandler(isSecurity: true))
+      .add(_di.get<UserAPI>().getHandler(isSecurity: true))
       .handler;
 
   var handler = Pipeline()

@@ -6,23 +6,23 @@ class TransactionService implements GenericService<TransactionModel> {
   final List<TransactionModel> _fakeDB = [];
 
   @override
-  bool delete(int id) {
+  Future<bool> delete(int id) {
     _fakeDB.removeWhere((e) => e.id == id);
-    return true;
+    return delete(id);
   }
 
   @override
-  List<TransactionModel> findAll() {
-    return _fakeDB;
+  Future<List<TransactionModel>> findAll() {
+    return findAll();
   }
 
   @override
-  TransactionModel findOne(int id) {
-    return _fakeDB.firstWhere((e) => e.id == id);
+  Future<TransactionModel> findOne(int id) {
+    return findOne(id);
   }
 
   @override
-  bool save(TransactionModel value) {
+  Future<bool> save(TransactionModel value) {
     TransactionModel? model = _fakeDB.firstWhereOrNull(
       (e) => e.id == value.id,
     );
@@ -38,6 +38,6 @@ class TransactionService implements GenericService<TransactionModel> {
       _fakeDB[index] = value;
     }
 
-    return true;
+    return save(value);
   }
 }

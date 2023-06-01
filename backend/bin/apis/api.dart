@@ -15,6 +15,7 @@ abstract class API {
     bool isSecurity = false,
   }) {
     middlewares ??= [];
+
     if (isSecurity) {
       var _securityService = DependencyInjector().get<SecurityService>();
       middlewares.addAll([
@@ -24,7 +25,6 @@ abstract class API {
     }
 
     var pipe = Pipeline();
-
     middlewares.forEach((m) => pipe = pipe.addMiddleware(m));
 
     return pipe.addHandler(router);

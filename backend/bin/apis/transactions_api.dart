@@ -19,8 +19,8 @@ class TransactionsAPI extends API {
     Router router = Router();
 
     //All transactions
-    router.get('/transactions', (Request req) {
-      List<TransactionModel> transactions = _service.findAll();
+    router.get('/transactions', (Request req) async {
+      List<TransactionModel> transactions = await _service.findAll();
       List<Map> transactionsMap = transactions.map((e) => e.toJson()).toList();
 
       return Response.ok(jsonEncode(transactionsMap),
@@ -30,7 +30,7 @@ class TransactionsAPI extends API {
     //Create transactions
     router.post('/transactions', (Request req) async {
       var body = await req.readAsString();
-      var result = _service.save(
+      var result = await _service.save(
         TransactionModel.fromJson(jsonDecode(body)),
       );
       return result ? Response(201) : Response(500);
