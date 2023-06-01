@@ -2,17 +2,15 @@ import 'package:mysql1/mysql1.dart';
 
 import 'db_configuration.dart';
 
-class MySQLConfiguration extends DBConfiguration {
+class MySQLConfiguration implements DBConfiguration {
   MySqlConnection? _connection;
 
   @override
-  // TODO: implement connection
   Future get connection async {
-    if (_connection == null) _connection = await createConnection();
-
-    if (_connection == null)
+    _connection ??= await createConnection();
+    if (_connection == null) {
       throw Exception('[ERROR] - Failed create connection');
-
+    }
     return _connection;
   }
 
@@ -30,8 +28,8 @@ class MySQLConfiguration extends DBConfiguration {
   }
 
   @override
-  execQuery(String sql, [List? parms]) {
-    // TODO: implement execQuery
-    throw UnimplementedError();
+  execQuery(String sql, [List? params]) async {
+    var conn = await connection;
+    return await conn.query(sql, params);
   }
 }

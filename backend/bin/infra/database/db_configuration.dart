@@ -3,5 +3,5 @@ abstract class DBConfiguration {
 
   Future<dynamic> get connection;
 
-  execQuery(String sql, [List? parms]);
+  execQuery(String sql, [List? params]);
 }

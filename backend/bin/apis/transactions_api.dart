@@ -18,37 +18,50 @@ class TransactionsAPI extends API {
   }) {
     Router router = Router();
 
+    //get one transaction
+    router.get('/transaction', (Request req) async {
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+
+      var transaction = await _service.findOne(int.parse(id));
+      if (transaction == null) return Response(400);
+
+      return Response.ok(jsonEncode(transaction.toJson()));
+    });
+
     //All transactions
     router.get('/transactions', (Request req) async {
       List<TransactionModel> transactions = await _service.findAll();
       List<Map> transactionsMap = transactions.map((e) => e.toJson()).toList();
 
-      return Response.ok(jsonEncode(transactionsMap),
-          headers: {'content-type': "application/json"});
+      return Response.ok(jsonEncode(transactionsMap));
     });
 
     //Create transactions
     router.post('/transactions', (Request req) async {
       var body = await req.readAsString();
       var result = await _service.save(
-        TransactionModel.fromJson(jsonDecode(body)),
+        TransactionModel.fromRequest(jsonDecode(body)),
       );
       return result ? Response(201) : Response(500);
     });
 
     //Update transactions
-    router.put('/transactions', (Request req) {
-      // String? id = req.url.queryParameters['id'];
-      // _service.save("");
-
-      return Response.ok('');
+    router.put('/transactions', (Request req) async {
+      var body = await req.readAsString();
+      var result = await _service.save(
+        TransactionModel.fromRequest(jsonDecode(body)),
+      );
+      return result ? Response(200) : Response(500);
     });
 
     //Delete transactions
-    router.delete('/transactions', (Request req) {
-      // String? id = req.url.queryParameters['id'];
-      // _service.delete(1);
-      return Response.ok('');
+    router.delete('/transactions', (Request req) async {
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+
+      var result = await _service.delete(int.parse(id));
+      return result ? Response(200) : Response.internalServerError();
     });
 
     return createHandler(

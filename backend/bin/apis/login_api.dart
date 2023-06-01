@@ -4,7 +4,6 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../infra/security/security_service.dart';
 import '../services/login_service.dart';
-import '../services/user_service.dart';
 import '../to/auth_to.dart';
 import 'api.dart';
 
