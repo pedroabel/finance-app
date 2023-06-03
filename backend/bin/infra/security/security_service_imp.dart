@@ -18,7 +18,8 @@ class SecurityServiceImp implements SecurityService<JWT> {
       'roles': ['admin', 'user'],
     });
 
-    String key = await CustomEnv.get(key: 'dartSecretkey');
+    // String key = await CustomEnv.get(key: 'jwt_key');
+    String key = 'dartSecretkey';
     String token = jwt.sign(SecretKey(key));
 
     return token;
@@ -26,7 +27,8 @@ class SecurityServiceImp implements SecurityService<JWT> {
 
   @override
   Future<JWT?> validateJWT(String token) async {
-    String key = await CustomEnv.get(key: "dartSecretkey");
+    // String key = await CustomEnv.get(key: "jwt_key");
+    String key = 'dartSecretkey';
 
     try {
       return JWT.verify(token, SecretKey(key));
