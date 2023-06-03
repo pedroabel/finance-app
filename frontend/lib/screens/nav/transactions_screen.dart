@@ -27,7 +27,7 @@ class TransactionsScreen extends StatelessWidget {
         children: <Widget>[
           Container(
             // Here the height of the container is 35% of our total height
-            height: size.height * .51,
+            height: size.height * .65,
             decoration: BoxDecoration(
               color: Colors.blue[800],
             ),
@@ -73,7 +73,7 @@ class TransactionsScreen extends StatelessWidget {
                               "Ultimas transações criadas recentemente",
                               style: TextStyle(
                                 color: Colors.white60,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                             ),
                           ],

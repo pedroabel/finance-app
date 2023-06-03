@@ -16,6 +16,18 @@ class UserAPI extends API {
   }) {
     final router = Router();
 
+    //get user
+    router.get('/user', (Request req) async {
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+
+      var user = await _userService.findOne(int.parse(id));
+      if (user == null) return Response(400);
+
+      return Response.ok(jsonEncode(user.toJson()));
+    });
+
+    //create user
     router.post('/user', (Request req) async {
       var body = await req.readAsString();
       if (body.isEmpty) return Response(400);

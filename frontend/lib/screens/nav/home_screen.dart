@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../models/user_model.dart';
+import '../../services/api.dart';
 import '../../widgets/transactions_tile.dart';
 
 class HomeScreen extends StatefulWidget {
+  // final String token;
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -10,6 +14,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ApiService api = ApiService();
+  UserModel? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  void _fetchUserData() {}
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

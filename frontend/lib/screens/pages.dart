@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/api.dart';
 import 'nav/goals_screen.dart';
 import 'nav/home_screen.dart';
 import 'nav/report_screen.dart';
@@ -13,6 +14,13 @@ class Pages extends StatefulWidget {
 }
 
 class _PagesState extends State<Pages> {
+  ApiService api = ApiService();
+
+  Future<String> getTokenFromAPI() async {
+    String token = await api.getToken();
+    return token;
+  }
+
   List pages = [
     const HomeScreen(),
     const TransactionsScreen(),

@@ -47,6 +47,15 @@ class UserModel {
       ..balance = map['balance'];
   }
 
+  Map toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'balance': balance,
+    };
+  }
+
   @override
   String toString() {
     return 'UserModel(id: $id, name: $name, email: $email, balance: $balance, isActived: $isActived, dtCriated: $dtCriated, dtUppdate: $dtUppdate)';
