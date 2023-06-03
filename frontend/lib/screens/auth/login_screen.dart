@@ -1,5 +1,5 @@
-import 'package:finance/screens/nav/home_screen.dart';
 import 'package:finance/screens/pages.dart';
+import 'package:finance/services/api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +16,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
+
+  ApiService api = ApiService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<bool> _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    return await api.loginRequest(email, password);
+  }
 
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -69,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration:
@@ -77,12 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Password',
+                        'Senha',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         obscureText: _obscureText,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: 'Insira sua senha',
                           suffixIcon: IconButton(
@@ -114,14 +127,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Pages(),
-                        ),
-                      );
+                      var responseLogin = await _login();
+                      if (responseLogin) {}
+                      Future.delayed(Duration.zero, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Pages(),
+                          ),
+                        );
+                      });
                     }
                   },
                   style: ButtonStyle(
