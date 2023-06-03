@@ -1,4 +1,4 @@
-import 'package:finance/welcome_screen.dart';
+import 'package:finance/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -13,9 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Finapp',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Poppins',
+        scaffoldBackgroundColor: Colors.blueGrey[50],
         primarySwatch: Colors.blue,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

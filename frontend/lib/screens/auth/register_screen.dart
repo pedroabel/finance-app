@@ -1,15 +1,16 @@
+import 'package:finance/screens/auth/login_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
 
@@ -41,24 +42,37 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 SvgPicture.asset('assets/logo/logo.svg'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Text(
-                  'Welcome back!',
+                  'Cadastro',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
                 ),
-                const SizedBox(height: 16),
-                const Text('Please login to access and start shopping'),
-                const SizedBox(height: 32),
+                const SizedBox(height: 14),
+                const Text('Digite seus dados para realizar o cadastro'),
+                const SizedBox(height: 28),
                 Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Nome',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration:
+                            const InputDecoration(hintText: 'Insira seu nome'),
+                        validator: _emailValidator,
+                      ),
+                      const SizedBox(height: 24),
                       Text(
                         'Email',
                         style: Theme.of(context).textTheme.titleSmall,
@@ -68,19 +82,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration:
-                            const InputDecoration(hintText: 'Enter your email'),
+                            const InputDecoration(hintText: 'Insira seu email'),
                         validator: _emailValidator,
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Password',
+                        'Senha',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         obscureText: _obscureText,
                         decoration: InputDecoration(
-                          hintText: 'Enter your password',
+                          hintText: 'Insira sua senha',
                           suffixIcon: IconButton(
                             icon: Icon(_obscureText
                                 ? Icons.visibility_off
@@ -94,18 +108,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         validator: _passwordValidator,
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            // Implement forgot password
-                          },
-                          child: const Text(
-                            'Forgot password?',
-                            style: TextStyle(color: Color(0xFF3D80DE)),
-                          ),
-                        ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Confirme a senha',
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration:
+                            const InputDecoration(hintText: 'Insira sua senha'),
+                        validator: _emailValidator,
+                      ),
+                      const SizedBox(height: 36),
                     ],
                   ),
                 ),
@@ -117,18 +133,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     minimumSize: MaterialStateProperty.all(
                         const Size(double.infinity, 48)),
                   ),
-                  child: const Text('Log in'),
+                  child: const Text('Cadastrar'),
                 ),
                 const SizedBox(height: 16),
                 RichText(
                   text: TextSpan(
-                    text: "Don't have an account? ",
+                    text: "Já possui uma conta? ",
                     style: const TextStyle(color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                        text: 'Sign up',
+                        text: 'Entre',
                         style: const TextStyle(color: Color(0xFF3D80DE)),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          },
                       ),
                     ],
                   ),
