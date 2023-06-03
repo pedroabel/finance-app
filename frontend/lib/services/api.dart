@@ -12,9 +12,9 @@ class ApiService {
   Future<bool> loginRequest(String email, String password) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var url = Uri.parse('$baseUrl/login');
+    var body = jsonEncode({'email': email, 'password': password});
 
-    var response =
-        await http.post(url, body: {"email": email, "password": password});
+    var response = await http.post(url, body: body);
 
     if (response.statusCode == 200) {
       var token = response.body;
