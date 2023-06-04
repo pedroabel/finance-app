@@ -1,3 +1,4 @@
+import 'package:finance/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user_model.dart';
@@ -45,19 +46,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     //NAVBAR
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.workspaces,
                           color: Colors.white,
                         ),
                         Row(
                           children: [
-                            Icon(Icons.notifications_rounded,
-                                color: Colors.white),
-                            SizedBox(width: 16.0),
-                            Icon(Icons.settings_rounded, color: Colors.white)
+                            Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SettingsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.settings_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ],
                         )
                       ],

@@ -24,11 +24,11 @@ class UserModel {
       id: json['name'],
       name: json['name'],
       email: json['email'],
-      password: json['name'],
-      balance: json['name'],
-      isActived: json['email'],
-      dtCriated: json['name'],
-      dtUppdate: json['email'],
+      password: json['password'],
+      balance: json['balance'],
+      isActived: json['isActived'],
+      dtCriated: json['dtCriated'],
+      dtUppdate: json['dtUppdate'],
     );
   }
 }

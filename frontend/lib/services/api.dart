@@ -10,6 +10,8 @@ class ApiService {
 
   static const String baseUrl = 'http://104.196.223.167:8080';
 
+  var userId = 1;
+
   Future<String> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('token');
@@ -55,7 +57,7 @@ class ApiService {
   }
 
   Future<UserModel> getUserData(String token) async {
-    var url = Uri.http(baseUrl, '/transactions');
+    var url = Uri.http(baseUrl, '/transactions', {'id': '$userId'});
     var headers = {
       'Authorization': 'Bearer $token',
     };
@@ -70,7 +72,7 @@ class ApiService {
     }
   }
 
-  Future<List<TransactionModel>> getUserTransactions(String token) async {
+  Future<List<TransactionModel>> getUserTransactions(String? token) async {
     var url = Uri.http(baseUrl, '/transactions');
     var headers = {
       'Authorization': 'Bearer $token',

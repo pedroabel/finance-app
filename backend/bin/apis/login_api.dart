@@ -26,7 +26,7 @@ class LoginAPI extends API {
       var userID = await _loginService.authenticate(authTO);
       if (userID > 0) {
         var jwt = await _securityService.generateJWT(userID.toString());
-        return Response.ok(jsonEncode({'token': jwt}));
+        return Response.ok(jsonEncode({'token': jwt, 'UserID': userID}));
       } else {
         return Response(401);
       }
