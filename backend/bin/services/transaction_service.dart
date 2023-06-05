@@ -21,6 +21,10 @@ class TransactionService implements GenericService<TransactionModel> {
     return _transactionDAO.findOne(id);
   }
 
+  Future<TransactionModel?> findUser(int id) {
+    return _transactionDAO.findUser(id);
+  }
+
   @override
   Future<bool> save(TransactionModel value) async {
     if (value.id != null) {

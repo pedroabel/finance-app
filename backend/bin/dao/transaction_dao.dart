@@ -54,4 +54,12 @@ class TransactionDAO implements DAO<TransactionModel> {
 
     return result.affectedRows > 0;
   }
+
+  Future<TransactionModel?> findUser(int id) async {
+    var result = await _dbConfiguration
+        .execQuery('SELECT * FROM transacoes WHERE id_usuario = ?', [id]);
+    return result.isEmpty
+        ? null
+        : TransactionModel.fromMap(result.first.fields);
+  }
 }

@@ -10,8 +10,6 @@ class ApiService {
 
   static const String baseUrl = 'http://104.196.223.167:8080';
 
-  var userId = 1;
-
   Future<String> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('token');
@@ -30,8 +28,11 @@ class ApiService {
       var jsonData = jsonDecode(body);
 
       var token = jsonData['token'];
+      var userID = jsonData['UserID'];
 
       await preferences.setString("token", token);
+      await preferences.setString("UserID", userID);
+
       return true;
     } else {
       throw Exception('Falha no login');
@@ -57,7 +58,10 @@ class ApiService {
   }
 
   Future<UserModel> getUserData(String token) async {
-    var url = Uri.http(baseUrl, '/transactions', {'id': '$userId'});
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var userId = preferences.getString("UserID");
+
+    var url = Uri.http(baseUrl, '/user', {'id': '$userId'});
     var headers = {
       'Authorization': 'Bearer $token',
     };

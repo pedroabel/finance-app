@@ -5,10 +5,11 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/transaction_model.dart';
 import '../services/generic_service.dart';
+import '../services/transaction_service.dart';
 import 'api.dart';
 
 class TransactionsAPI extends API {
-  final GenericService<TransactionModel> _service;
+  final TransactionService _service;
   TransactionsAPI(this._service);
 
   @override
@@ -23,7 +24,7 @@ class TransactionsAPI extends API {
       String? id = req.url.queryParameters['id'];
       if (id == null) return Response(400);
 
-      var transaction = await _service.findOne(int.parse(id));
+      var transaction = await _service.findUser(int.parse(id));
       if (transaction == null) return Response(400);
 
       return Response.ok(jsonEncode(transaction.toJson()));
