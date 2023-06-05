@@ -130,15 +130,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       var responseLogin = await _login();
-                      if (responseLogin) {}
-                      Future.delayed(Duration.zero, () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Pages(),
-                          ),
-                        );
-                      });
+                      if (responseLogin) {
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Pages(),
+                            ),
+                          );
+                        });
+                      } else {
+                        //Limpar campos e aviso de nao sucesso
+                      }
                     }
                   },
                   style: ButtonStyle(

@@ -2,6 +2,7 @@ import 'package:finance/screens/auth/login_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:finance/services/api.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,6 +14,27 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
+
+  ApiService api = ApiService();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  Future<bool> _register() async {
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String balance = '0,00';
+
+    return await api.createUser(
+      name,
+      email,
+      password,
+      balance,
+    );
+  }
 
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -66,11 +88,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
-                        keyboardType: TextInputType.emailAddress,
+                        controller: _nameController,
+                        keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
                         decoration:
                             const InputDecoration(hintText: 'Insira seu nome'),
-                        validator: _emailValidator,
                       ),
                       const SizedBox(height: 24),
                       Text(
@@ -79,6 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration:
@@ -93,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 12),
                       TextFormField(
                         obscureText: _obscureText,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: 'Insira sua senha',
                           suffixIcon: IconButton(
@@ -115,19 +139,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        decoration:
-                            const InputDecoration(hintText: 'Insira sua senha'),
-                        validator: _emailValidator,
+                        obscureText: _obscureText,
+                        controller: _confirmPasswordController,
+                        decoration: InputDecoration(
+                          hintText: 'Insira sua senha',
+                          suffixIcon: IconButton(
+                            icon: Icon(_obscureText
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
+                        ),
+                        validator: _passwordValidator,
                       ),
                       const SizedBox(height: 36),
                     ],
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (_confirmPasswordController.text ==
+                          _passwordController.text) {
+                        var responseRegister = await _register();
+
+                        if (responseRegister) {
+                          Future.delayed(Duration.zero, () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          });
+                        }
+                      }
+                    }
                   },
                   style: ButtonStyle(
                     minimumSize: MaterialStateProperty.all(

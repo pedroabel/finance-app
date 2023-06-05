@@ -10,10 +10,10 @@ class ApiService {
 
   static const String baseUrl = 'http://104.196.223.167:8080';
 
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('token');
-    return token ?? '';
+    return token;
   }
 
   Future<bool> loginRequest(String email, String password) async {
@@ -31,7 +31,7 @@ class ApiService {
       var userID = jsonData['UserID'];
 
       await preferences.setString("token", token);
-      await preferences.setString("UserID", userID);
+      await preferences.setInt("UserID", userID);
 
       return true;
     } else {
@@ -39,19 +39,16 @@ class ApiService {
     }
   }
 
-  Future<String> createUser(
+  Future<bool> createUser(
       String name, String email, String password, String balance) async {
-    var url = Uri.http(baseUrl, '/login');
+    var url = Uri.parse('$baseUrl/user');
+    var body = jsonEncode(
+        {'name': name, 'email': email, 'password': password, 'balance': "0"});
 
-    var response = await http.post(url, body: {
-      'name': name,
-      'email': email,
-      'password': password,
-      'balance': balance,
-    });
+    var response = await http.post(url, body: body);
 
     if (response.statusCode == 201) {
-      return 'Usuario criado com sucesso';
+      return true;
     } else {
       throw Exception('Falha na criação de usuario');
     }
@@ -61,7 +58,7 @@ class ApiService {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userId = preferences.getString("UserID");
 
-    var url = Uri.http(baseUrl, '/user', {'id': '$userId'});
+    var url = Uri.parse('$baseUrl/user?id=$userId');
     var headers = {
       'Authorization': 'Bearer $token',
     };
@@ -76,20 +73,25 @@ class ApiService {
     }
   }
 
-  Future<List<TransactionModel>> getUserTransactions(String? token) async {
-    var url = Uri.http(baseUrl, '/transactions');
+  Future<List<TransactionModel>> getUserTransactions() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    ApiService api = ApiService();
+    var userId = preferences.getInt("UserID");
+    var url = Uri.parse('$baseUrl/transactions?id=$userId');
+    var token = await api.getToken(); // Aguarda a obtenção do token
     var headers = {
       'Authorization': 'Bearer $token',
     };
 
-    var response = await http.post(url, headers: headers);
+    var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
       var transactionsData = jsonDecode(response.body);
       List<TransactionModel> transactions = [];
 
-      for (var transactionData in transactionsData) {
-        transactions.add(TransactionModel.fromJson(transactionData));
+      for (var transactionDataMap in transactionsData) {
+        var transactionModel = TransactionModel.fromJson(transactionDataMap);
+        transactions.add(transactionModel);
       }
 
       return transactions;

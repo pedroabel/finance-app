@@ -16,8 +16,8 @@ class Pages extends StatefulWidget {
 class _PagesState extends State<Pages> {
   ApiService api = ApiService();
 
-  Future<String> getTokenFromAPI() async {
-    String token = await api.getToken();
+  Future<String?> getTokenFromAPI() async {
+    String? token = await api.getToken();
     return token;
   }
 

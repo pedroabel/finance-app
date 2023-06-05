@@ -7,15 +7,15 @@ class TransactionModel {
   final DateTime dtUpdate;
   final int userId;
 
-  factory TransactionModel.fromJson(Map<String, dynamic> map) {
+  factory TransactionModel.fromJson(Map map) {
     return TransactionModel(
       id: map['id'],
-      type: map['tipo'],
-      title: map['titulo'],
-      value: map['valor'],
-      dtCreated: map['dt_criacao'],
-      dtUpdate: map['dt_atualizacao'],
-      userId: map['id_usuario'],
+      type: map['type'],
+      title: map['title'],
+      value: map['value'],
+      dtCreated: DateTime.parse(map['dtCreated']),
+      dtUpdate: DateTime.parse(map['dtUpdate']),
+      userId: map['userId']?.toInt(),
     );
   }
 

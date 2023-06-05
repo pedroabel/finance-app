@@ -1,20 +1,16 @@
-import 'package:finance/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/bar_graph.dart';
 import '../../widgets/transactions_tile.dart';
 
 class TransactionsScreen extends StatefulWidget {
-  final String token;
-  const TransactionsScreen({Key? key, required this.token}) : super(key: key);
+  const TransactionsScreen({Key? key}) : super(key: key);
 
   @override
   State<TransactionsScreen> createState() => _TransactionsScreenState();
 }
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
-  UserModel? _usuario;
-
   @override
   void initState() {
     super.initState();
