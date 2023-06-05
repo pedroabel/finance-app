@@ -1,4 +1,4 @@
-import 'package:finance/screens/pages.dart';
+import 'package:finance/pages.dart';
 import 'package:finance/services/api.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

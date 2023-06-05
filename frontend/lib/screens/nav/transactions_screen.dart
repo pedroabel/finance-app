@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/bar_graph.dart';
-import '../../widgets/transactions_tile.dart';
-
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({Key? key}) : super(key: key);
 
@@ -12,186 +9,111 @@ class TransactionsScreen extends StatefulWidget {
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    List<double> weeklySummary = [
-      7.40,
-      2.58,
-      5.40,
-      4.58,
-      3.40,
-      8.58,
-      9.01,
-      2.58,
-    ];
-
     return Scaffold(
-      //BODY
-      body: Stack(
-        children: <Widget>[
-          Container(
-            // Here the height of the container is 35% of our total height
-            height: size.height * .65,
-            decoration: BoxDecoration(
-              color: Colors.blue[800],
-            ),
-          ),
-          SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.all(38.0),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(38.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    'Cadastre uma transação',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Form(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //NAVBAR
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.workspaces,
-                          color: Colors.white,
+                    const SizedBox(height: 24),
+                    Text(
+                      'Nome',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      // controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(hintText: 'Nome da transação'),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Preço',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      // controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(hintText: 'Insira o valor'),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Tipo',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Renda',
+                          child: Text('Renda'),
                         ),
-                        Row(
-                          children: [
-                            Icon(Icons.notifications_rounded,
-                                color: Colors.white),
-                            SizedBox(width: 16.0),
-                            Icon(Icons.settings_rounded, color: Colors.white)
-                          ],
-                        )
+                        DropdownMenuItem(
+                          value: 'Despesa',
+                          child: Text('Despesa'),
+                        ),
                       ],
+                      onChanged: (value) {},
                     ),
-
-                    const SizedBox(height: 25),
-
-                    //TITLE
-                    const Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("TRANSAÇÕES",
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                            Text(
-                              "Ultimas transações criadas recentemente",
-                              style: TextStyle(
-                                color: Colors.white60,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    const SizedBox(height: 24),
+                    Text(
+                      'Email',
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
-
-                    const SizedBox(height: 28),
-
-                    //GRAFICO
-                    Container(
-                      padding: const EdgeInsets.all(28.0),
-                      width: double.infinity,
-                      constraints: const BoxConstraints(
-                        minHeight: 300.0, // Minimum height
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          color: Colors.white),
-                      child: Center(
-                        child: SizedBox(
-                            height: 200,
-                            child: MyBarGraph(
-                              weeklySummary: weeklySummary,
-                            )),
-                      ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      // controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(hintText: 'Insira seu email'),
                     ),
-
-                    const SizedBox(height: 35),
-                    //TRANSACTIONS
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            //Titulo
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Todos",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[900]),
-                                ),
-                                const SizedBox(width: 34),
-                                Text(
-                                  "Despesas",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[300]),
-                                ),
-                                const SizedBox(width: 34),
-                                Text(
-                                  "Rendas",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[300]),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 20),
-                            Expanded(
-                                child: ListView(
-                              children: const [
-                                TransactionsTile(
-                                  icon: Icons.fastfood_rounded,
-                                  transactions: "Comida - iFood",
-                                  price: "R\$ 25,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.cut_rounded,
-                                  transactions: "Barbeiro",
-                                  price: "R\$ 45,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.shopping_cart_rounded,
-                                  transactions: "Mercado",
-                                  price: "R\$ 300,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.payments_rounded,
-                                  transactions: "Pix",
-                                  price: "R\$ 100,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.theater_comedy_rounded,
-                                  transactions: "Cinema",
-                                  price: "R\$ 18,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.icecream_rounded,
-                                  transactions: "Milkshake",
-                                  price: "R\$ 25,00",
-                                ),
-                              ],
-                            ))
-                          ],
-                        ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () async {},
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(
+                            const Size(double.infinity, 48)),
                       ),
-                    )
+                      child: const Text('Log in'),
+                    ),
                   ],
-                )),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

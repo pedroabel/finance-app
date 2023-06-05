@@ -1,4 +1,4 @@
-import 'package:finance/screens/welcome_screen.dart';
+import 'package:finance/screens/auth/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 48),
-            backgroundColor: const Color(0xFFF2994A),
+            backgroundColor: Colors.blue[800],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
               side: BorderSide.none,
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           enabledBorder: defaultOutlineInputBorder,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFF2994A)),
+            borderSide: BorderSide(color: Colors.blue[800]!),
           ),
         ),
       ),

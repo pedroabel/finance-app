@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../services/api.dart';
-import 'nav/goals_screen.dart';
-import 'nav/home_screen.dart';
-import 'nav/report_screen.dart';
-import 'nav/transactions_screen.dart';
+import 'services/api.dart';
+import 'screens/nav/goals_screen.dart';
+import 'screens/nav/home_screen.dart';
+import 'screens/nav/transactions_screen.dart';
+import 'screens/nav/reports_screen.dart';
 
 class Pages extends StatefulWidget {
   const Pages({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _PagesState extends State<Pages> {
   List pages = [
     const HomeScreen(),
     const TransactionsScreen(),
-    const ReportScreen(),
+    const ReportsScreen(),
     const GoalsScreen(),
   ];
 
