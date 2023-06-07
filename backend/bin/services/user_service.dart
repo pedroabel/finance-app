@@ -17,12 +17,12 @@ class UserService implements GenericService<UserModel> {
   @override
   Future<UserModel?> findOne(int id) async => _userDAO.findOne(id);
 
-  Future<bool> updateBalance(UserModel value) async =>
-      _userDAO.updateBalance(value);
-
   @override
   Future<bool> save(UserModel value) async {
     if (value.id != null) {
+      final hash = Password.hash(value.password!, PBKDF2());
+      value.password = hash;
+
       return _userDAO.update(value);
     } else {
       final hash = Password.hash(value.password!, PBKDF2());
@@ -35,4 +35,7 @@ class UserService implements GenericService<UserModel> {
 
   Future<UserModel?> findByEmail(String email) async =>
       _userDAO.findByEmail(email);
+
+  Future<bool> updateBalance(UserModel value) async =>
+      _userDAO.updateBalance(value);
 }

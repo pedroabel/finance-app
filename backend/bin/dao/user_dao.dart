@@ -42,8 +42,8 @@ class UserDAO implements DAO<UserModel> {
   @override
   Future<bool> update(UserModel value) async {
     var result = await _dbConfiguration.execQuery(
-      'UPDATE usuarios SET nome = ?, senha = ? WHERE id = ?',
-      [value.name, value.password, value.id],
+      'UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?',
+      [value.name, value.email, value.password, value.id],
     );
 
     return result.affectedRows > 0;
@@ -51,7 +51,7 @@ class UserDAO implements DAO<UserModel> {
 
   Future<bool> updateBalance(UserModel value) async {
     var result = await _dbConfiguration.execQuery(
-      'UPDATE usuarios SET balance = ? WHERE id = ?',
+      'UPDATE usuarios SET saldo = ? WHERE id = ?',
       [value.balance, value.id],
     );
 

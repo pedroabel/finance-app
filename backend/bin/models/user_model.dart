@@ -41,15 +41,10 @@ class UserModel {
 
   factory UserModel.fromRequest(Map map) {
     return UserModel()
+      ..id = map['id']
       ..name = map['name']
       ..email = map['email']
       ..password = map['password']
-      ..balance = map['balance'];
-  }
-
-  factory UserModel.fromBalance(Map map) {
-    return UserModel()
-      ..id = map['id']
       ..balance = map['balance'];
   }
 

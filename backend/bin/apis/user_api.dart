@@ -29,20 +29,18 @@ class UserAPI extends API {
 
     //update user
     router.put('/user', (Request req) async {
-      String? id = req.url.queryParameters['id'];
-      if (id == null) return Response(400);
-
-      var user = await _userService.findOne(int.parse(id));
-      if (user == null) return Response(400);
-
-      return Response.ok(jsonEncode(user.toJson()));
+      var body = await req.readAsString();
+      var result = await _userService.save(
+        UserModel.fromRequest(jsonDecode(body)),
+      );
+      return result ? Response(200) : Response(500);
     });
 
     //update balnce
     router.put('/user/saldo', (Request req) async {
       var body = await req.readAsString();
       var result = await _userService.updateBalance(
-        UserModel.fromBalance(jsonDecode(body)),
+        UserModel.fromRequest(jsonDecode(body)),
       );
       return result ? Response(200) : Response(500);
     });
