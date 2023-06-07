@@ -4,7 +4,6 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../models/transaction_model.dart';
-import '../services/generic_service.dart';
 import '../services/transaction_service.dart';
 import 'api.dart';
 

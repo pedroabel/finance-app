@@ -47,6 +47,12 @@ class UserModel {
       ..balance = map['balance'];
   }
 
+  factory UserModel.fromBalance(Map map) {
+    return UserModel()
+      ..id = map['id']
+      ..balance = map['balance'];
+  }
+
   Map toJson() {
     return {
       'id': id,

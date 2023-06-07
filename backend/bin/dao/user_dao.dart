@@ -49,6 +49,15 @@ class UserDAO implements DAO<UserModel> {
     return result.affectedRows > 0;
   }
 
+  Future<bool> updateBalance(UserModel value) async {
+    var result = await _dbConfiguration.execQuery(
+      'UPDATE usuarios SET balance = ? WHERE id = ?',
+      [value.balance, value.id],
+    );
+
+    return result.affectedRows > 0;
+  }
+
   Future<UserModel?> findByEmail(String email) async {
     var r = await _dbConfiguration
         .execQuery('select id,senha from usuarios where email = ?', [email]);

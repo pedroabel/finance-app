@@ -17,6 +17,9 @@ class UserService implements GenericService<UserModel> {
   @override
   Future<UserModel?> findOne(int id) async => _userDAO.findOne(id);
 
+  Future<bool> updateBalance(UserModel value) async =>
+      _userDAO.updateBalance(value);
+
   @override
   Future<bool> save(UserModel value) async {
     if (value.id != null) {
