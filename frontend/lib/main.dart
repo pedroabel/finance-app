@@ -1,6 +1,5 @@
 import 'package:finance/screens/auth/welcome_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'constants.dart';
 
 void main() {

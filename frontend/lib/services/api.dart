@@ -86,13 +86,9 @@ class ApiService {
     var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      var transactionsData = jsonDecode(response.body);
-      List<TransactionModel> transactions = [];
-
-      for (var transactionDataMap in transactionsData) {
-        var transactionModel = TransactionModel.fromJson(transactionDataMap);
-        transactions.add(transactionModel);
-      }
+      final data = jsonDecode(response.body);
+      final transactions = List<TransactionModel>.from(
+          data.map((json) => TransactionModel.fromJson(json)));
 
       return transactions;
     } else {

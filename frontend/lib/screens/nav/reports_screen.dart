@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/transaction_model.dart';
+import '../../services/api.dart';
 import '../../widgets/bar_graph.dart';
 import '../../widgets/transactions_tile.dart';
 
@@ -11,15 +13,18 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
+  late Future<List<TransactionModel>> futureTransactions;
+  ApiService api = ApiService();
+
   @override
   void initState() {
     super.initState();
+    futureTransactions = api.getUserTransactions();
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
     List<double> weeklySummary = [
       7.40,
       2.58,
@@ -44,152 +49,142 @@ class _ReportsScreenState extends State<ReportsScreen> {
           ),
           SafeArea(
             child: Padding(
-                padding: const EdgeInsets.all(38.0),
-                child: Column(
-                  children: [
-                    //NAVBAR
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.workspaces,
-                          color: Colors.white,
-                        ),
-                        Row(
-                          children: [
-                            Icon(Icons.notifications_rounded,
-                                color: Colors.white),
-                            SizedBox(width: 16.0),
-                            Icon(Icons.settings_rounded, color: Colors.white)
-                          ],
-                        )
-                      ],
-                    ),
+              padding: const EdgeInsets.all(38.0),
+              child: Column(
+                children: [
+                  //NAVBAR
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.workspaces,
+                        color: Colors.white,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.notifications_rounded,
+                              color: Colors.white),
+                          SizedBox(width: 16.0),
+                          Icon(Icons.settings_rounded, color: Colors.white)
+                        ],
+                      )
+                    ],
+                  ),
 
-                    const SizedBox(height: 25),
+                  const SizedBox(height: 25),
 
-                    //TITLE
-                    const Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("TRANSAÇÕES",
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                            Text(
-                              "Ultimas transações criadas recentemente",
+                  //TITLE
+                  const Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Relatorio",
                               style: TextStyle(
-                                color: Colors.white60,
-                                fontSize: 16,
-                              ),
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          Text(
+                            "Ultimas transações criadas recentemente",
+                            style: TextStyle(
+                              color: Colors.white60,
+                              fontSize: 16,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 28),
+
+                  //GRAFICO
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    width: double.infinity,
+                    constraints: const BoxConstraints(
+                      minHeight: 300.0, // Minimum height
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white),
+                    child: Center(
+                      child: SizedBox(
+                        height: 200,
+                        child: MyBarGraph(
+                          weeklySummary: weeklySummary,
                         ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 28),
-
-                    //GRAFICO
-                    Container(
-                      padding: const EdgeInsets.all(28.0),
-                      width: double.infinity,
-                      constraints: const BoxConstraints(
-                        minHeight: 300.0, // Minimum height
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          color: Colors.white),
-                      child: Center(
-                        child: SizedBox(
-                            height: 200,
-                            child: MyBarGraph(
-                              weeklySummary: weeklySummary,
-                            )),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 35),
-                    //TRANSACTIONS
-                    Expanded(
-                      child: Center(
-                        child: Column(
+                  const SizedBox(height: 35),
+                  Expanded(
+                    child: Center(
+                      child: Column(children: [
+                        //Titulo
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            //Titulo
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Todos",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[900]),
-                                ),
-                                const SizedBox(width: 34),
-                                Text(
-                                  "Despesas",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[300]),
-                                ),
-                                const SizedBox(width: 34),
-                                Text(
-                                  "Rendas",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.indigo[300]),
-                                ),
-                              ],
+                            Text(
+                              "Todos",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.indigo[900]),
                             ),
-
-                            const SizedBox(height: 20),
-                            Expanded(
-                                child: ListView(
-                              children: const [
-                                TransactionsTile(
-                                  icon: Icons.fastfood_rounded,
-                                  transactions: "Comida - iFood",
-                                  price: "R\$ 25,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.cut_rounded,
-                                  transactions: "Barbeiro",
-                                  price: "R\$ 45,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.shopping_cart_rounded,
-                                  transactions: "Mercado",
-                                  price: "R\$ 300,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.payments_rounded,
-                                  transactions: "Pix",
-                                  price: "R\$ 100,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.theater_comedy_rounded,
-                                  transactions: "Cinema",
-                                  price: "R\$ 18,00",
-                                ),
-                                TransactionsTile(
-                                  icon: Icons.icecream_rounded,
-                                  transactions: "Milkshake",
-                                  price: "R\$ 25,00",
-                                ),
-                              ],
-                            ))
+                            const SizedBox(width: 34),
+                            Text(
+                              "Despesas",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.indigo[300]),
+                            ),
+                            const SizedBox(width: 34),
+                            Text(
+                              "Rendas",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.indigo[300]),
+                            ),
                           ],
                         ),
-                      ),
-                    )
-                  ],
-                )),
+                      ]),
+                    ),
+                  ),
+
+                  //TRANSACTIONS
+                  Expanded(
+                    child: FutureBuilder<List<TransactionModel>>(
+                      future: futureTransactions,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final transactions = snapshot.data!;
+                          return ListView.builder(
+                            itemCount: transactions.length,
+                            itemBuilder: (context, index) {
+                              final transaction = transactions[index];
+                              return TransactionsTile(
+                                icon: Icons.fastfood_rounded,
+                                transactions: transaction.title ?? '',
+                                price: "R\$ ${transaction.value ?? ''}",
+                                type: transaction.type ?? '',
+                              );
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error ao carregar os itens: ${snapshot.error}');
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

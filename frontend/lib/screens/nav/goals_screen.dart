@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:finance/services/api.dart';
 import 'package:flutter/material.dart';
 
@@ -12,67 +11,46 @@ class GoalsScreen extends StatefulWidget {
 }
 
 class _GoalsScreenState extends State<GoalsScreen> {
-  List<TransactionModel> transactions = [];
+  late Future<List<TransactionModel>> futureTransactions;
   ApiService api = ApiService();
-  bool isLoading = true;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    obterTransacoes();
-  }
-
-  Future<void> obterTransacoes() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      List<TransactionModel> fetchedTransactions =
-          await api.getUserTransactions();
-      setState(() {
-        transactions = fetchedTransactions;
-        isLoading = false;
-      });
-    } catch (e) {
-      print('Erro ao obter transações: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
+  void initState() {
+    super.initState();
+    futureTransactions = api.getUserTransactions();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Tarefas'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'JSON completo:',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Expanded(
-            child: isLoading
-                ? Center(
-                    child:
-                        CircularProgressIndicator()) // Mostrar tela de carregamento
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        jsonEncode(transactions),
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-          ),
-        ],
-      ),
+    return FutureBuilder<List<TransactionModel>>(
+      future: futureTransactions,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Erro ao carregar os itens: ${snapshot.error}'),
+          );
+        } else if (snapshot.hasData) {
+          final transactions = snapshot.data!;
+          return ListView.builder(
+            itemCount: transactions.length,
+            itemBuilder: (context, index) {
+              final item = transactions[index];
+              return ListTile(
+                title: Text(item.title ?? ''),
+                subtitle: Text(item.value ?? ''),
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: Text('Nenhum item encontrado.'),
+          );
+        }
+      },
     );
   }
 }

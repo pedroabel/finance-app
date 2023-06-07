@@ -21,7 +21,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 children: [
                   Icon(
                     Icons.arrow_back_ios_rounded,
-                    color: Colors.black,
+                    color: Colors.blue,
                   ),
                   SizedBox(width: 10.0),
                   Text(
@@ -88,7 +88,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Email',
+                      'Data',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 12),
@@ -97,7 +97,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       decoration:
-                          const InputDecoration(hintText: 'Insira seu email'),
+                          const InputDecoration(hintText: 'Insira a data '),
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
@@ -106,7 +106,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                         minimumSize: MaterialStateProperty.all(
                             const Size(double.infinity, 48)),
                       ),
-                      child: const Text('Log in'),
+                      child: const Text('Cadastrar'),
                     ),
                   ],
                 ),

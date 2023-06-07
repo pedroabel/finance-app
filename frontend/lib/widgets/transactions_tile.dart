@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 
 class TransactionsTile extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final icon;
+  final IconData icon;
   final String transactions;
   final String price;
+  final String type;
 
   const TransactionsTile({
     Key? key,
     required this.icon,
     required this.transactions,
     required this.price,
+    required this.type,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -45,7 +46,6 @@ class TransactionsTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //Text
                     Text(
                       transactions,
                       style: const TextStyle(
@@ -54,13 +54,11 @@ class TransactionsTile extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-
                     const SizedBox(
                       width: 5,
                     ),
-
                     Text(
-                      "Categoria",
+                      type,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[700],
