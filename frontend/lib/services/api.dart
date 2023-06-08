@@ -54,9 +54,10 @@ class ApiService {
     }
   }
 
-  Future<UserModel> getUserData(String token) async {
+  Future<UserModel> getUserData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userId = preferences.getString("UserID");
+    var token = await getToken();
 
     var url = Uri.parse('$baseUrl/user?id=$userId');
     var headers = {
@@ -75,10 +76,9 @@ class ApiService {
 
   Future<List<TransactionModel>> getUserTransactions() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    ApiService api = ApiService();
     var userId = preferences.getInt("UserID");
     var url = Uri.parse('$baseUrl/transactions?id=$userId');
-    var token = await api.getToken(); // Aguarda a obtenção do token
+    var token = getToken(); // Aguarda a obtenção do token
     var headers = {
       'Authorization': 'Bearer $token',
     };

@@ -41,6 +41,17 @@ class TransactionsAPI extends API {
       return Response.ok(jsonEncode(transactionsMap));
     });
 
+    //All transactions
+    router.get('/transactions/all', (Request req) async {
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+
+      List<TransactionModel> transactions = await _service.findAll();
+      List<Map> transactionsMap = transactions.map((e) => e.toJson()).toList();
+
+      return Response.ok(jsonEncode(transactionsMap));
+    });
+
     //Create transactions
     router.post('/transactions', (Request req) async {
       var body = await req.readAsString();

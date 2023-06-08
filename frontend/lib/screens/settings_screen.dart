@@ -1,3 +1,4 @@
+import 'package:finance/services/api.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -8,6 +9,13 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  ApiService api = ApiService();
+
+  void initState() {
+    super.initState();
+    api.getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

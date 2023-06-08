@@ -6,8 +6,6 @@ import '../../services/api.dart';
 import '../../widgets/transactions_tile.dart';
 
 class HomeScreen extends StatefulWidget {
-  // final String token;
-
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -297,67 +295,72 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const SizedBox(height: 20),
                   //TRANSACTIONS
-
                   Expanded(
                     child: Center(
-                      child: Column(children: [
-                        //Titulo
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Todos",
-                              style: TextStyle(
+                      child: Column(
+                        children: [
+                          // Título
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Todos",
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.indigo[900]),
-                            ),
-                            const SizedBox(width: 34),
-                            Text(
-                              "Despesas",
-                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.indigo[900],
+                                ),
+                              ),
+                              const SizedBox(width: 34),
+                              Text(
+                                "Despesas",
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.indigo[300]),
-                            ),
-                            const SizedBox(width: 34),
-                            Text(
-                              "Rendas",
-                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.indigo[300],
+                                ),
+                              ),
+                              const SizedBox(width: 34),
+                              Text(
+                                "Rendas",
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.indigo[300]),
+                                  fontSize: 18,
+                                  color: Colors.indigo[300],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Expanded(
+                            child: FutureBuilder<List<TransactionModel>>(
+                              future: futureTransactions,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final transactions = snapshot.data!;
+                                  return ListView.builder(
+                                    itemCount: transactions.length,
+                                    itemBuilder: (context, index) {
+                                      final transaction = transactions[index];
+                                      return TransactionsTile(
+                                        icon: Icons.wallet_rounded,
+                                        transactions: transaction.title ?? '',
+                                        price: "R\$ ${transaction.value ?? ''}",
+                                        type: transaction.type ?? '',
+                                      );
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error ao carregar os itens: ${snapshot.error}');
+                                }
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
                             ),
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: FutureBuilder<List<TransactionModel>>(
-                      future: futureTransactions,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final transactions = snapshot.data!;
-                          return ListView.builder(
-                            itemCount: transactions.length,
-                            itemBuilder: (context, index) {
-                              final transaction = transactions[index];
-                              return TransactionsTile(
-                                icon: Icons.fastfood_rounded,
-                                transactions: transaction.title ?? '',
-                                price: "R\$ ${transaction.value ?? ''}",
-                                type: transaction.type ?? '',
-                              );
-                            },
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text(
-                              'Error ao carregar os itens: ${snapshot.error}');
-                        }
-                        return const Center(child: CircularProgressIndicator());
-                      },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
