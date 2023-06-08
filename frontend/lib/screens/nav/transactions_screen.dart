@@ -12,14 +12,16 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
-  final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _dataController = TextEditingController();
+  String _typeController = "";
 
   ApiService api = ApiService();
 
   Future<bool> _createTransactions() async {
     String title = _titleController.text;
     String value = _valueController.text;
-    String type = _typeController.text;
+    String type = _typeController;
+    // String data = _dataController.text;
 
     return await api.createTransactions(title, type, value);
   }
@@ -28,14 +30,15 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   void dispose() {
     _titleController.dispose();
     _valueController.dispose();
-    _typeController.dispose();
+    _dataController.dispose();
     super.dispose();
   }
 
   void _clearFields() {
     _titleController.clear();
     _valueController.clear();
-    _typeController.clear();
+    _dataController.clear();
+    _typeController = '';
   }
 
   @override
@@ -129,7 +132,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           child: Text('Despesa'),
                         ),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          _typeController =
+                              value ?? ''; // Atualiza o valor selecionado
+                        });
+                      },
                     ),
                     const SizedBox(height: 24),
                     Text(
@@ -138,7 +146,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      controller: _typeController,
+                      controller: _dataController,
                       keyboardType: TextInputType.datetime,
                       textInputAction: TextInputAction.next,
                       validator: (value) {
