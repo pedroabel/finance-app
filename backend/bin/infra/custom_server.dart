@@ -12,7 +12,7 @@ class CustomServer {
   // }
 
   Future<void> initialize(Handler handler) async {
-    String address = 'localhost';
+    String address = '0.0.0.0';
     int port = 8080;
 
     await shelf_io.serve(handler, address, port);
