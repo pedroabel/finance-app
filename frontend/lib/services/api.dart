@@ -95,4 +95,28 @@ class ApiService {
       throw Exception('Falha ao obter transacoes do usuario');
     }
   }
+
+  Future<bool> createTransactions(
+      String title, String type, String value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    ApiService api = ApiService();
+    var userId = preferences.getInt("UserID");
+    var url = Uri.parse('$baseUrl/transactions');
+    var token = await api.getToken(); // Aguarda a obtenção do token
+    var headers = {
+      'Authorization': 'Bearer $token',
+    };
+    var body = jsonEncode(
+        {'title': title, 'type': type, 'value': value, 'userId': userId});
+
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Falha na criação de usuario');
+    }
+  }
+
+  Future<void> updateUser() async {}
 }

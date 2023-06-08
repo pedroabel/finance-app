@@ -1,3 +1,4 @@
+import 'package:finance/services/api.dart';
 import 'package:flutter/material.dart';
 
 class TransactionsScreen extends StatefulWidget {
@@ -8,6 +9,35 @@ class TransactionsScreen extends StatefulWidget {
 }
 
 class _TransactionsScreenState extends State<TransactionsScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _valueController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
+
+  ApiService api = ApiService();
+
+  Future<bool> _createTransactions() async {
+    String title = _titleController.text;
+    String value = _valueController.text;
+    String type = _typeController.text;
+
+    return await api.createTransactions(title, type, value);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _valueController.dispose();
+    _typeController.dispose();
+    super.dispose();
+  }
+
+  void _clearFields() {
+    _titleController.clear();
+    _valueController.clear();
+    _typeController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +65,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 ],
               ),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -45,11 +76,18 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      // controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: _titleController,
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
-                      decoration:
-                          const InputDecoration(hintText: 'Nome da transação'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira um nome';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Nome da transação',
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Text(
@@ -58,11 +96,18 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      // controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: _valueController,
+                      keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
-                      decoration:
-                          const InputDecoration(hintText: 'Insira o valor'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira um preço';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Insira o valor',
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Text(
@@ -93,18 +138,31 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      // controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: _typeController,
+                      keyboardType: TextInputType.datetime,
                       textInputAction: TextInputAction.next,
-                      decoration:
-                          const InputDecoration(hintText: 'Insira a data '),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira uma data';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Insira a data',
+                      ),
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _createTransactions();
+                          _clearFields();
+                        }
+                      },
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
-                            const Size(double.infinity, 48)),
+                          const Size(double.infinity, 48),
+                        ),
                       ),
                       child: const Text('Cadastrar'),
                     ),

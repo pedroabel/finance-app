@@ -31,7 +31,11 @@ class TransactionsAPI extends API {
 
     //All transactions
     router.get('/transactions', (Request req) async {
-      List<TransactionModel> transactions = await _service.findAll();
+      String? id = req.url.queryParameters['id'];
+      if (id == null) return Response(400);
+
+      List<TransactionModel> transactions =
+          await _service.findAllFromUser(int.parse(id));
       List<Map> transactionsMap = transactions.map((e) => e.toJson()).toList();
 
       return Response.ok(jsonEncode(transactionsMap));

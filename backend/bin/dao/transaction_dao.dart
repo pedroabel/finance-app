@@ -36,6 +36,15 @@ class TransactionDAO implements DAO<TransactionModel> {
         .cast<TransactionModel>();
   }
 
+  Future<List<TransactionModel>> findAllFromUser(int userId) async {
+    var result = await _dbConfiguration
+        .execQuery('SELECT * FROM transacoes WHERE id_usuario = ?', [userId]);
+    return result
+        .map((r) => TransactionModel.fromMap(r.fields))
+        .toList()
+        .cast<TransactionModel>();
+  }
+
   @override
   Future<TransactionModel?> findOne(int id) async {
     var result = await _dbConfiguration
