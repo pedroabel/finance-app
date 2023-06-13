@@ -43,7 +43,7 @@ class ApiService {
       String name, String email, String password, double balance) async {
     var url = Uri.parse('$baseUrl/user');
     var body = jsonEncode(
-        {'name': name, 'email': email, 'password': password, 'balance': 0});
+        {'name': name, 'email': email, 'password': password, 'balance': 0.0});
 
     var response = await http.post(url, body: body);
 
