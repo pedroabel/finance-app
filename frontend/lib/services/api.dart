@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:finance/models/transaction_model.dart';
 import 'package:finance/models/user_model.dart';
@@ -56,9 +57,8 @@ class ApiService {
 
   Future<UserModel> getUserData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString("UserID");
+    var userId = preferences.getInt("UserID");
     var token = await getToken();
-
     var url = Uri.parse('$baseUrl/user?id=$userId');
     var headers = {
       'Authorization': 'Bearer $token',
@@ -67,14 +67,61 @@ class ApiService {
     var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      var userData = await jsonDecode(response.body);
-      return UserModel.fromJson(userData);
+      final data = jsonDecode(response.body);
+      final user = UserModel.fromJson(data);
+      log(response.body);
+
+      return user;
     } else {
       throw Exception("Error in getUserData");
     }
   }
 
   Future<List<TransactionModel>> getUserTransactions() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var userId = preferences.getInt("UserID");
+    var url = Uri.parse('$baseUrl/transactions?id=$userId');
+    var token = getToken(); // Aguarda a obtenção do token
+    var headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final transactions = List<TransactionModel>.from(
+          data.map((json) => TransactionModel.fromJson(json)));
+
+      return transactions;
+    } else {
+      throw Exception('Falha ao obter transacoes do usuario');
+    }
+  }
+
+  Future<List<TransactionModel>> getExpenseTransactions() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var userId = preferences.getInt("UserID");
+    var url = Uri.parse('$baseUrl/transactions?id=$userId');
+    var token = getToken(); // Aguarda a obtenção do token
+    var headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final transactions = List<TransactionModel>.from(
+          data.map((json) => TransactionModel.fromJson(json)));
+
+      return transactions;
+    } else {
+      throw Exception('Falha ao obter transacoes do usuario');
+    }
+  }
+
+  Future<List<TransactionModel>> getIncomeTransactions() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userId = preferences.getInt("UserID");
     var url = Uri.parse('$baseUrl/transactions?id=$userId');
@@ -110,16 +157,16 @@ class ApiService {
         {'title': title, 'type': type, 'value': value, 'userId': userId});
 
     var response = await http.post(url, body: body, headers: headers);
+    await updateBalance(value, type);
 
     if (response.statusCode == 201) {
-      await updateBalance(value, type); // Aguarda a atualização do saldo
       return true;
     } else {
       throw Exception('Falha na criação de usuário');
     }
   }
 
-  Future<bool> updateBalance(double value, String type) async {
+  Future<bool> updateBalance(double value, String? type) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     ApiService api = ApiService();
     var userId = preferences.getInt("UserID");
@@ -129,23 +176,22 @@ class ApiService {
       'Authorization': 'Bearer $token',
     };
 
-    double totalBalance = 0.0;
-
     var user = await getUserData();
     UserModel userData = user;
+    var balance = userData.balance;
+    double parsedValue = value;
+    double? parsedBalance = balance;
+    double totalBalance = 0.0;
 
-    if (type == 'Renda') {
-      totalBalance = userData.balance + value;
-    }
-    if (type == 'Despesa') {
-      totalBalance = userData.balance - value;
-    }
+    type == "Renda"
+        ? totalBalance = (parsedBalance! + parsedValue)
+        : totalBalance = (parsedBalance! - parsedValue);
 
     var body = jsonEncode({'balance': totalBalance, 'id': userId});
 
     var response = await http.put(url, body: body, headers: headers);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       throw Exception('Falha na atualização de saldo');

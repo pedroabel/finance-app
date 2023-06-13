@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:finance/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/transaction_model.dart';
+import '../../models/user_model.dart';
 import '../../services/api.dart';
 import '../../widgets/transactions_tile.dart';
 
@@ -15,11 +18,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ApiService api = ApiService();
   late Future<List<TransactionModel>> futureTransactions;
+  late Future<UserModel> futureUserData;
 
   @override
   void initState() {
     super.initState();
     futureTransactions = api.getUserTransactions();
+    futureUserData = api.getUserData();
+
+    futureUserData
+        .then((value) => log(value.password ?? 'Password not available'));
   }
 
   @override
@@ -122,42 +130,66 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.w500),
                         ),
 
-                        //---VALUES
-                        Row(
-                          children: [
-                            Text(
-                              "R\$ 106.00",
-                              style: TextStyle(
-                                  color: Colors.indigo[900],
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 30),
+                        FutureBuilder<UserModel>(
+                          future: futureUserData,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final userData = snapshot.data!;
 
-                            //PERCENT
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 8.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.deepPurple[900],
-                              ),
-                              child: const Row(children: [
-                                Icon(
-                                  Icons.arrow_drop_up,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  "8%",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ]),
-                            ),
-                          ],
+                              final formattedBalance =
+                                  'R\$ ${userData.balance?.toStringAsFixed(2).replaceAll('.', ',') ?? '0,00'}';
+
+                              return Row(
+                                children: [
+                                  Text(
+                                    formattedBalance,
+                                    style: TextStyle(
+                                      color: Colors.indigo[900],
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 30),
+
+                                  //PERCENT
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0,
+                                      vertical: 8.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.deepPurple[900],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.arrow_drop_up,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          "8%",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                'Error ao carregar os dados do usuário: ${snapshot.error}',
+                              );
+                            }
+                            return const CircularProgressIndicator();
+                          },
                         ),
+
+// ...
 
                         const SizedBox(height: 15),
 

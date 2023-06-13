@@ -1,34 +1,36 @@
 class UserModel {
-  int id;
-  String name;
-  String email;
-  String password;
-  double balance;
-  bool isActived;
-  DateTime dtCriated;
-  DateTime dtUppdate;
+  String? id;
+  String? name;
+  String? email;
+  String? password;
+  double? balance;
+  bool? isActived;
+  DateTime? dtCreated;
+  DateTime? dtUpdated;
 
   UserModel({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.password,
-    required this.balance,
-    required this.isActived,
-    required this.dtCriated,
-    required this.dtUppdate,
+    this.id,
+    this.name,
+    this.email,
+    this.password,
+    this.balance,
+    this.isActived,
+    this.dtCreated,
+    this.dtUpdated,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['name'],
+      id: json['id'].toString(),
       name: json['name'],
       email: json['email'],
       password: json['password'],
-      balance: json['balance'],
+      balance: json['balance']?.toDouble(),
       isActived: json['isActived'],
-      dtCriated: json['dtCriated'],
-      dtUppdate: json['dtUppdate'],
+      dtCreated:
+          json['dtCreated'] != null ? DateTime.parse(json['dtCreated']) : null,
+      dtUpdated:
+          json['dtUppdate'] != null ? DateTime.parse(json['dtUppdate']) : null,
     );
   }
 }
