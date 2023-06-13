@@ -2,7 +2,7 @@ class TransactionModel {
   final int? id;
   final String? type;
   final String? title;
-  final String? value;
+  final double? value;
   final DateTime? dtCreated;
   final DateTime? dtUpdate;
   final int? userId;
@@ -12,7 +12,7 @@ class TransactionModel {
       id: map['id'] as int?,
       type: map['type'] as String? ?? '',
       title: map['title'] as String? ?? '',
-      value: map['value'] as String? ?? '',
+      value: map['value'] as double?,
       dtCreated: map['dtCreated'] != null
           ? DateTime.parse(map['dtCreated'] as String)
           : null,

@@ -40,10 +40,10 @@ class ApiService {
   }
 
   Future<bool> createUser(
-      String name, String email, String password, String balance) async {
+      String name, String email, String password, double balance) async {
     var url = Uri.parse('$baseUrl/user');
     var body = jsonEncode(
-        {'name': name, 'email': email, 'password': password, 'balance': "0"});
+        {'name': name, 'email': email, 'password': password, 'balance': 0});
 
     var response = await http.post(url, body: body);
 
@@ -97,7 +97,7 @@ class ApiService {
   }
 
   Future<bool> createTransactions(
-      String title, String type, String value) async {
+      String title, String type, double value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     ApiService api = ApiService();
     var userId = preferences.getInt("UserID");
@@ -112,11 +112,52 @@ class ApiService {
     var response = await http.post(url, body: body, headers: headers);
 
     if (response.statusCode == 201) {
+      await updateBalance(value, type); // Aguarda a atualização do saldo
       return true;
     } else {
-      throw Exception('Falha na criação de usuario');
+      throw Exception('Falha na criação de usuário');
     }
   }
 
-  Future<void> updateUser() async {}
+  Future<bool> updateBalance(double value, String? type) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    ApiService api = ApiService();
+    var userId = preferences.getInt("UserID");
+    var url = Uri.parse('$baseUrl/user/saldo');
+    var token = await api.getToken(); // Aguarda a obtenção do token
+    var headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    var body = jsonEncode({'balance': value, 'id': userId});
+
+    var response = await http.put(url, body: body, headers: headers);
+
+    if (response.statusCode == 201) {
+      double totalBalance = 0.0;
+
+      try {
+        var user = await getUserData();
+        UserModel userData = user;
+
+        if (type == "Renda") {
+          totalBalance = value + userData.balance;
+        } else {
+          totalBalance = value + userData.balance;
+        }
+
+        String total = totalBalance.toStringAsFixed(2).replaceAll('.', ',');
+        await http.put(url,
+            body: jsonEncode({'balance': total, 'id': userId}),
+            headers: headers);
+
+        return true;
+      } catch (error) {
+        print(error);
+        return false;
+      }
+    } else {
+      throw Exception('Falha na atualização de saldo');
+    }
+  }
 }

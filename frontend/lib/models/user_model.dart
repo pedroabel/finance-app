@@ -3,7 +3,7 @@ class UserModel {
   String name;
   String email;
   String password;
-  String balance;
+  double balance;
   bool isActived;
   DateTime dtCriated;
   DateTime dtUppdate;

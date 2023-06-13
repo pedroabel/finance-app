@@ -41,7 +41,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               final item = transactions[index];
               return ListTile(
                 title: Text(item.title ?? ''),
-                subtitle: Text(item.value ?? ''),
+                subtitle: Text(item.value.toString()),
               );
             },
           );

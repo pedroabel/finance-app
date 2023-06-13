@@ -3,7 +3,7 @@ class UserModel {
   String? name;
   String? email;
   String? password;
-  String? balance;
+  double? balance;
   bool? isActived;
   DateTime? dtCriated;
   DateTime? dtUppdate;
@@ -25,7 +25,7 @@ class UserModel {
       map['id']?.toInt() ?? 0,
       map['nome'] ?? '',
       map['email'] ?? '',
-      map['saldo'] ?? '',
+      map['saldo'],
       map['is_ativo'] == 1,
       map['dt_criacao'],
       map['dt_atualizacao'],

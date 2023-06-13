@@ -36,7 +36,7 @@ class UserAPI extends API {
       return result ? Response(200) : Response(500);
     });
 
-    //update balnce
+    //update balance
     router.put('/user/saldo', (Request req) async {
       var body = await req.readAsString();
       var result = await _userService.updateBalance(

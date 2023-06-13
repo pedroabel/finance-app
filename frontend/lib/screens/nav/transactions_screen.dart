@@ -19,7 +19,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   Future<bool> _createTransactions() async {
     String title = _titleController.text;
-    String value = _valueController.text;
+    double value = 0;
     String type = _typeController;
     // String data = _dataController.text;
 

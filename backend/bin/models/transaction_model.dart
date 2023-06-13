@@ -3,7 +3,7 @@ class TransactionModel {
   int? id;
   String? type;
   String? title;
-  String? value;
+  double? value;
   DateTime? dtCreated;
   DateTime? dtUpdate;
   int? userId;

@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String name = _nameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
-    String balance = '0,00';
+    double balance = 0.0;
 
     return await api.createUser(
       name,
