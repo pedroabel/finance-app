@@ -119,7 +119,7 @@ class ApiService {
     }
   }
 
-  Future<bool> updateBalance(double value, String? type) async {
+  Future<bool> updateBalance(double value, String type) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     ApiService api = ApiService();
     var userId = preferences.getInt("UserID");
@@ -129,33 +129,24 @@ class ApiService {
       'Authorization': 'Bearer $token',
     };
 
-    var body = jsonEncode({'balance': value, 'id': userId});
+    double totalBalance = 0.0;
+
+    var user = await getUserData();
+    UserModel userData = user;
+
+    if (type == 'Renda') {
+      totalBalance = userData.balance + value;
+    }
+    if (type == 'Despesa') {
+      totalBalance = userData.balance - value;
+    }
+
+    var body = jsonEncode({'balance': totalBalance, 'id': userId});
 
     var response = await http.put(url, body: body, headers: headers);
 
     if (response.statusCode == 201) {
-      double totalBalance = 0.0;
-
-      try {
-        var user = await getUserData();
-        UserModel userData = user;
-
-        if (type == "Renda") {
-          totalBalance = value + userData.balance;
-        } else {
-          totalBalance = value + userData.balance;
-        }
-
-        String total = totalBalance.toStringAsFixed(2).replaceAll('.', ',');
-        await http.put(url,
-            body: jsonEncode({'balance': total, 'id': userId}),
-            headers: headers);
-
-        return true;
-      } catch (error) {
-        print(error);
-        return false;
-      }
+      return true;
     } else {
       throw Exception('Falha na atualização de saldo');
     }
