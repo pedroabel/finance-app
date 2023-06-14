@@ -30,18 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'Por favor insira o seu email';
     }
     if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
         .hasMatch(value)) {
-      return 'Please enter a valid email';
+      return 'Por favor insira um email valido';
     }
     return null;
   }
 
   String? _passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+      return 'Por favor insira sua senha';
     }
     return null;
   }
@@ -140,7 +140,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         });
                       } else {
-                        //Limpar campos e aviso de nao sucesso
+                        // Limpar campos e exibir aviso de não sucesso
+                        _formKey.currentState!.reset();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Falha no login'),
+                              content: Text('Usuário ou senha inválidos.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       }
                     }
                   },

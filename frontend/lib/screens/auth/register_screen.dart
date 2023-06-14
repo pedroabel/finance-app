@@ -36,20 +36,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  String? _nameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor insira seu nome';
+    }
+    return null;
+  }
+
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'Por insira o seu email';
     }
     if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
         .hasMatch(value)) {
-      return 'Please enter a valid email';
+      return 'Por favor insira um email valido';
     }
     return null;
   }
 
   String? _passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+      return 'Por favor insira uma senha';
     }
     return null;
   }
@@ -93,6 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         textInputAction: TextInputAction.next,
                         decoration:
                             const InputDecoration(hintText: 'Insira seu nome'),
+                        validator: _nameValidator,
                       ),
                       const SizedBox(height: 24),
                       Text(
