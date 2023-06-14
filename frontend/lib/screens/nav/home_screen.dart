@@ -19,12 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ApiService api = ApiService();
   late Future<List<TransactionModel>> futureTransactions;
   late Future<UserModel> futureUserData;
+  late Future<double> futureIncome;
+  late Future<double> futureExpense;
+  late String selectedFilter = "Todos";
 
   @override
   void initState() {
     super.initState();
     futureTransactions = api.getUserTransactions();
     futureUserData = api.getUserData();
+    futureIncome = api.getUserIncome();
+    futureExpense = api.getUserExpense();
 
     futureUserData
         .then((value) => log(value.password ?? 'Password not available'));
@@ -161,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.deepPurple[900],
                                     ),
-                                    child: Row(
+                                    child: const Row(
                                       children: [
                                         Icon(
                                           Icons.arrow_drop_up,
@@ -202,87 +207,124 @@ class _HomeScreenState extends State<HomeScreen> {
                         //DOWNSIDE
 
                         //---EXPENSES + INCOMES
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            //Expenses
-                            Row(
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 20.0),
-                                      child: Icon(
-                                        Icons.wallet_rounded,
-                                        color: Colors.lightBlue,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Despesas",
-                                          style: TextStyle(
-                                              color: Colors.indigo,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          "R\$ 1.250",
-                                          style: TextStyle(
-                                              color: Colors.redAccent,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
+                        FutureBuilder<double>(
+                          future: futureExpense,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final expense = snapshot.data!;
+                              final formattedExpense =
+                                  'R\$ ${expense.toStringAsFixed(2).replaceAll('.', ',')}';
 
-                            //Incomes
-                            Row(
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 20.0),
-                                      child: Icon(
-                                        Icons.account_balance_wallet,
-                                        color: Colors.lightBlue,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Rendas",
-                                          style: TextStyle(
-                                              color: Colors.indigo,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          "R\$ 1.356",
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  //Expenses
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 8.0),
+                                            child: Icon(
+                                              Icons.wallet_rounded,
+                                              color: Colors.lightBlue,
+                                              size: 30,
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Despesas",
+                                                style: TextStyle(
+                                                    color: Colors.indigo,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                formattedExpense,
+                                                style: const TextStyle(
+                                                    color: Colors.redAccent,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+
+                                  //Incomes
+                                  FutureBuilder<double>(
+                                    future: futureIncome,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final income = snapshot.data!;
+                                        final formattedIncome =
+                                            'R\$ ${income.toStringAsFixed(2).replaceAll('.', ',')}';
+
+                                        return Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0),
+                                                  child: Icon(
+                                                    Icons
+                                                        .account_balance_wallet,
+                                                    color: Colors.lightBlue,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      "Rendas",
+                                                      style: TextStyle(
+                                                          color: Colors.indigo,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                    Text(
+                                                      formattedIncome,
+                                                      style: const TextStyle(
+                                                          color: Colors.green,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                            'Error ao carregar os dados de renda: ${snapshot.error}');
+                                      }
+                                      return CircularProgressIndicator();
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                  'Error ao carregar os dados de despesa: ${snapshot.error}');
+                            }
+                            return CircularProgressIndicator();
+                          },
                         ),
-
                         const SizedBox(height: 15),
                         //TIPS
                         Row(
@@ -335,30 +377,57 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                "Todos",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.indigo[900],
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedFilter = "Todos";
+                                  });
+                                },
+                                child: Text(
+                                  "Todos",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: selectedFilter == "Todos"
+                                        ? Colors.indigo[900]
+                                        : Colors.indigo[300],
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 34),
-                              Text(
-                                "Despesas",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.indigo[300],
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedFilter = "Despesas";
+                                  });
+                                },
+                                child: Text(
+                                  "Despesas",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: selectedFilter == "Despesas"
+                                        ? Colors.indigo[900]
+                                        : Colors.indigo[300],
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 34),
-                              Text(
-                                "Rendas",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.indigo[300],
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedFilter = "Rendas";
+                                  });
+                                },
+                                child: Text(
+                                  "Rendas",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: selectedFilter == "Rendas"
+                                        ? Colors.indigo[900]
+                                        : Colors.indigo[300],
+                                  ),
                                 ),
                               ),
                             ],
@@ -370,14 +439,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   final transactions = snapshot.data!;
+                                  List<TransactionModel> filteredTransactions =
+                                      [];
+
+                                  if (selectedFilter == "Despesas") {
+                                    filteredTransactions = transactions
+                                        .where((transaction) =>
+                                            transaction.type == "Despesa")
+                                        .toList();
+                                  } else if (selectedFilter == "Rendas") {
+                                    filteredTransactions = transactions
+                                        .where((transaction) =>
+                                            transaction.type == "Renda")
+                                        .toList();
+                                  } else {
+                                    filteredTransactions = transactions;
+                                  }
+
                                   return ListView.builder(
-                                    itemCount: transactions.length,
+                                    itemCount: filteredTransactions.length,
                                     itemBuilder: (context, index) {
-                                      final transaction = transactions[index];
+                                      final transaction =
+                                          filteredTransactions[index];
                                       return TransactionsTile(
                                         icon: Icons.wallet_rounded,
                                         transactions: transaction.title ?? '',
-                                        price: "R\$ ${transaction.value ?? ''}",
+                                        price:
+                                            "R\$ ${transaction.value?.toStringAsFixed(2).replaceAll('.', ',') ?? '0,00'}",
                                         type: transaction.type ?? '',
                                       );
                                     },

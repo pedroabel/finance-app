@@ -99,48 +99,30 @@ class ApiService {
     }
   }
 
-  Future<List<TransactionModel>> getExpenseTransactions() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getInt("UserID");
-    var url = Uri.parse('$baseUrl/transactions?id=$userId');
-    var token = getToken(); // Aguarda a obtenção do token
-    var headers = {
-      'Authorization': 'Bearer $token',
-    };
+  Future<double> getUserIncome() async {
+    final List<TransactionModel> transactions = await getUserTransactions();
+    double income = 0;
 
-    var response = await http.get(url, headers: headers);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final transactions = List<TransactionModel>.from(
-          data.map((json) => TransactionModel.fromJson(json)));
-
-      return transactions;
-    } else {
-      throw Exception('Falha ao obter transacoes do usuario');
+    for (TransactionModel transaction in transactions) {
+      if (transaction.type == 'Renda') {
+        income += transaction.value ?? 0;
+      }
     }
+
+    return income;
   }
 
-  Future<List<TransactionModel>> getIncomeTransactions() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getInt("UserID");
-    var url = Uri.parse('$baseUrl/transactions?id=$userId');
-    var token = getToken(); // Aguarda a obtenção do token
-    var headers = {
-      'Authorization': 'Bearer $token',
-    };
+  Future<double> getUserExpense() async {
+    final List<TransactionModel> transactions = await getUserTransactions();
+    double expense = 0;
 
-    var response = await http.get(url, headers: headers);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final transactions = List<TransactionModel>.from(
-          data.map((json) => TransactionModel.fromJson(json)));
-
-      return transactions;
-    } else {
-      throw Exception('Falha ao obter transacoes do usuario');
+    for (TransactionModel transaction in transactions) {
+      if (transaction.type == 'Despesa') {
+        expense += transaction.value ?? 0;
+      }
     }
+
+    return expense;
   }
 
   Future<bool> createTransactions(
