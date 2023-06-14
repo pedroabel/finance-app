@@ -1,6 +1,8 @@
 import 'package:finance/services/api.dart';
 import 'package:flutter/material.dart';
 
+import '../models/user_model.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -9,11 +11,22 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  late Future<UserModel?> futureUserData;
   ApiService api = ApiService();
 
+  @override
   void initState() {
     super.initState();
-    api.getUserData();
+    futureUserData = fetchUserData();
+  }
+
+  Future<UserModel?> fetchUserData() async {
+    try {
+      return await api.getUserData();
+    } catch (error) {
+      // Handle the error as needed
+      return null;
+    }
   }
 
   @override
@@ -21,18 +34,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: const Color(
           0xffffffff), //you can paste your custom code color, but this one is for demo purpose,
-      body: ListView(
-        padding: const EdgeInsets.all(12),
-        physics:
-            const BouncingScrollPhysics(), //use this for a bouncing experience
-        children: [
-          Container(height: 35),
-          userTile(),
-          divider(),
-          colorTiles(),
-          divider(),
-          bwTiles(),
-        ],
+      body: FutureBuilder<UserModel?>(
+        future: futureUserData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              padding: const EdgeInsets.all(12),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Container(height: 35),
+                userTile(snapshot.data!),
+                divider(),
+                colorTiles(),
+                divider(),
+                bwTiles(),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       // bottomNavigationBar: bottomNavigationBar(),
       // floatingActionButton: fab(),
@@ -40,19 +67,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget userTile() {
-    //I use pixabay.com & unsplash.com for most of the time.
-    return const ListTile(
-      // leading: CircleAvatar(
-      //   backgroundImage: NetworkImage(Urls.avatar1),
-      // ),
+  Widget userTile(UserModel user) {
+    return ListTile(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios_rounded),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       title: Text(
-        "Usuario ",
+        user.name ?? '',
         style: TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
-      subtitle: Text("Profissao"),
+      subtitle: Text(user.email ?? ''),
     );
   }
 
@@ -77,7 +106,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget bwTiles() {
-    // Color color = Colors.blueGrey.shade800; not satisfied, so let us pick it
     return Column(
       children: [
         bwTile(Icons.info_outline, "SAQ"),
@@ -86,9 +114,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
     );
   }
-
-//only for ease of understanding, other wise you can use colorTile Directly,
-// in my preference, i split the widgets into as many chunks as possible
 
   Widget bwTile(IconData icon, String text) {
     return colorTile(icon, Colors.black, text, blackAndWhite: true);
@@ -115,14 +140,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onTap: () {},
     );
   }
-
-  // Widget fab(){
-  //   //this is not satisfying for
-  //   // return FloatingActionButton(
-  //   //   mini: true,
-  //   //   child: Icon(Icons.add,
-  //   //   color: Colors.white),
-  //   //   onPressed: () {},
-  //   // );
-  // }
 }
