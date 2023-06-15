@@ -157,32 +157,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(width: 30),
 
                                   //PERCENT
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
-                                      vertical: 8.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.deepPurple[900],
-                                    ),
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.arrow_drop_up,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          "8%",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  // Container(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //     horizontal: 10.0,
+                                  //     vertical: 8.0,
+                                  //   ),
+                                  //   decoration: BoxDecoration(
+                                  //     borderRadius: BorderRadius.circular(8),
+                                  //     color: Colors.deepPurple[900],
+                                  //   ),
+                                  //   child: const Row(
+                                  //     children: [
+                                  //       Icon(
+                                  //         Icons.arrow_drop_up,
+                                  //         color: Colors.white,
+                                  //       ),
+                                  //       Text(
+                                  //         "8%",
+                                  //         style: TextStyle(
+                                  //           color: Colors.white,
+                                  //           fontSize: 14,
+                                  //           fontWeight: FontWeight.normal,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               );
                             } else if (snapshot.hasError) {

@@ -97,10 +97,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget colorTiles() {
     return Column(
       children: [
-        colorTile(Icons.person_outline, Colors.deepPurple, "Seus dados"),
-        colorTile(Icons.settings_outlined, Colors.blue, "Configurações"),
-        colorTile(Icons.credit_card, Colors.pink, "Integração com banco"),
-        colorTile(Icons.favorite_border, Colors.orange, "Apoie"),
+        colorTile(Icons.person_outline, Colors.black, "Seus dados"),
+        colorTile(Icons.settings_outlined, Colors.black, "Configurações"),
+        colorTile(Icons.credit_card, Colors.black, "Integração com banco"),
+        colorTile(Icons.favorite_border, Colors.black, "Apoie"),
       ],
     );
   }

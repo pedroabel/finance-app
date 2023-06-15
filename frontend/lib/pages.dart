@@ -56,8 +56,8 @@ class _PagesState extends State<Pages> {
               icon: Icon(Icons.payments), label: "Transactions"),
           BottomNavigationBarItem(
               icon: Icon(Icons.bar_chart_rounded), label: "Reports"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notes_rounded), label: "Goals"),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.notes_rounded), label: "Goals"),
         ],
       ),
     );
